@@ -1,264 +1,77 @@
-# 📦 Project Setup 
+# Assignment 10 – Secure FastAPI with CI/CD & Docker
+
+![CI/CD Status](https://github.com/Hanyyoussef4/Assignment10/actions/workflows/test.yml/badge.svg)
+
+A FastAPI application with:
+
+1. Secure User model (bcrypt password hashing, JWT auth)
+2. PostgreSQL backend via SQLAlchemy
+3. Full test coverage (unit, integration, e2e)
+4. GitHub Actions CI pipeline (tests → security scan → Docker build & push)
+5. Docker image published to Docker Hub
 
 ---
 
-# 🧩 1. Install Homebrew (Mac Only)
+## 🔗 Quick Links
 
-> Skip this step if you're on Windows.
-
-Homebrew is a package manager for macOS.  
-You’ll use it to easily install Git, Python, Docker, etc.
-
-**Install Homebrew:**
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-**Verify Homebrew:**
-
-```bash
-brew --version
-```
-
-If you see a version number, you're good to go.
+* **GitHub Repo**: [https://github.com/Hanyyoussef4/Assignment10](https://github.com/Hanyyoussef4/Assignment10)
+* **Docker Hub**: [https://hub.docker.com/r/hany25/assignment10](https://hub.docker.com/r/hany25/assignment10)
+* **Reflection**: [Documentation/Reflection.md](Documentation/Reflection.md)
 
 ---
 
-# 🧩 2. Install and Configure Git
-
-## Install Git
-
-- **MacOS (using Homebrew)**
+## 🐳 Docker Image
 
 ```bash
-brew install git
-```
-
-- **Windows**
-
-Download and install [Git for Windows](https://git-scm.com/download/win).  
-Accept the default options during installation.
-
-**Verify Git:**
-
-```bash
-git --version
+docker pull hany25/assignment10:latest
+docker run -p 8000:8000 hany25/assignment10:latest
 ```
 
 ---
 
-## Configure Git Globals
+## 📂 Project Structure
 
-Set your name and email so Git tracks your commits properly:
-
-```bash
-git config --global user.name "Your Name"
-git config --global user.email "your_email@example.com"
 ```
-
-Confirm the settings:
-
-```bash
-git config --list
-```
-
----
-
-## Generate SSH Keys and Connect to GitHub
-
-> Only do this once per machine.
-
-1. Generate a new SSH key:
-
-```bash
-ssh-keygen -t ed25519 -C "your_email@example.com"
-```
-
-(Press Enter at all prompts.)
-
-2. Start the SSH agent:
-
-```bash
-eval "$(ssh-agent -s)"
-```
-
-3. Add the SSH private key to the agent:
-
-```bash
-ssh-add ~/.ssh/id_ed25519
-```
-
-4. Copy your SSH public key:
-
-- **Mac/Linux:**
-
-```bash
-cat ~/.ssh/id_ed25519.pub | pbcopy
-```
-
-- **Windows (Git Bash):**
-
-```bash
-cat ~/.ssh/id_ed25519.pub | clip
-```
-
-5. Add the key to your GitHub account:
-   - Go to [GitHub SSH Settings](https://github.com/settings/keys)
-   - Click **New SSH Key**, paste the key, save.
-
-6. Test the connection:
-
-```bash
-ssh -T git@github.com
-```
-
-You should see a success message.
-
----
-
-# 🧩 3. Clone the Repository
-
-Now you can safely clone the course project:
-
-```bash
-git clone <repository-url>
-cd <repository-directory>
+.
+├── app/
+│   ├── auth/                   # Authentication dependencies & JWT
+│   ├── models/                 # SQLAlchemy ORM models
+│   ├── operations/             # Business logic functions
+│   ├── schemas/                # Pydantic request/response models
+│   ├── database.py             # Engine & session setup
+│   └── config.py               # SECRET_KEY, token expiry, etc.
+├── tests/                      # Unit, integration & e2e tests
+├── Documentation/              # Screenshots & reflection (rename doc to Documentation)
+│   ├── Docker Hub Deployment.png
+│   ├── GitHub Actions Workflow.png
+│   └── reflection.md
+├── requirements.txt            # Python dependencies
+├── Dockerfile                  # Container instructions
+├── docker-compose.yml          # Dev environment
+├── main.py                     # FastAPI entrypoint
+├── .github/
+│   └── workflows/
+│       └── test.yml            # CI/CD pipeline
+└── README.md                   # (this file)
 ```
 
 ---
 
-# 🛠️ 4. Install Python 3.10+
+## 🚦 CI/CD Pipeline
 
-## Install Python
+1. **test** – runs unit, integration & e2e tests
+2. **security** – builds a local image and scans with Trivy
+3. **deploy** – builds and pushes `hany25/assignment10` (latest & SHA tags)
 
-- **MacOS (Homebrew)**
+<details>
+<summary>View workflow screenshot</summary>
 
-```bash
-brew install python
-```
+!\[GitHub Actions Workflow]\(Documentation/GitHub\ Actions\ Workflow\.png)
 
-- **Windows**
-
-Download and install [Python for Windows](https://www.python.org/downloads/).  
-✅ Make sure you **check the box** `Add Python to PATH` during setup.
-
-**Verify Python:**
-
-```bash
-python3 --version
-```
-or
-```bash
-python --version
-```
+</details>
 
 ---
 
-## Create and Activate a Virtual Environment
-
-(Optional but recommended)
-
-```bash
-python3 -m venv venv
-source venv/bin/activate   # Mac/Linux
-venv\Scripts\activate.bat  # Windows
-```
-
-### Install Required Packages
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-# 🐳 5. (Optional) Docker Setup
-
-> Skip if Docker isn't used in this module.
-
-## Install Docker
-
-- [Install Docker Desktop for Mac](https://www.docker.com/products/docker-desktop/)
-- [Install Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/)
-
-## Build Docker Image
-
-```bash
-docker build -t <image-name> .
-```
-
-## Run Docker Container
-
-```bash
-docker run -it --rm <image-name>
-```
-
----
-
-# 🚀 6. Running the Project
-
-- **Without Docker**:
-
-```bash
-python main.py
-```
-
-(or update this if the main script is different.)
-
-- **With Docker**:
-
-```bash
-docker run -it --rm <image-name>
-```
-
----
-
-# 📝 7. Submission Instructions
-
-After finishing your work:
-
-```bash
-git add .
-git commit -m "Complete Module X"
-git push origin main
-```
-
-Then submit the GitHub repository link as instructed.
-
----
-
-# 🔥 Useful Commands Cheat Sheet
-
-| Action                         | Command                                          |
-| ------------------------------- | ------------------------------------------------ |
-| Install Homebrew (Mac)          | `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` |
-| Install Git                     | `brew install git` or Git for Windows installer |
-| Configure Git Global Username  | `git config --global user.name "Your Name"`      |
-| Configure Git Global Email     | `git config --global user.email "you@example.com"` |
-| Clone Repository                | `git clone <repo-url>`                          |
-| Create Virtual Environment     | `python3 -m venv venv`                           |
-| Activate Virtual Environment   | `source venv/bin/activate` / `venv\Scripts\activate.bat` |
-| Install Python Packages        | `pip install -r requirements.txt`               |
-| Build Docker Image              | `docker build -t <image-name> .`                |
-| Run Docker Container            | `docker run -it --rm <image-name>`               |
-| Push Code to GitHub             | `git add . && git commit -m "message" && git push` |
-
----
-
-# 📋 Notes
-
-- Install **Homebrew** first on Mac.
-- Install and configure **Git** and **SSH** before cloning.
-- Use **Python 3.10+** and **virtual environments** for Python projects.
-- **Docker** is optional depending on the project.
-
----
-
-# 📎 Quick Links
-
-- [Homebrew](https://brew.sh/)
-- [Git Downloads](https://git-scm.com/downloads)
-- [Python Downloads](https://www.python.org/downloads/)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- [GitHub SSH Setup Guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+**Author:** Hany Youssef
+**Course:** IS601 – Module 10
+**Date:** July 26, 2025
